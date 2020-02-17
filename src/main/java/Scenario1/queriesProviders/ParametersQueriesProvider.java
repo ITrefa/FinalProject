@@ -1,4 +1,4 @@
-package Scenario1;
+package Scenario1.queriesProviders;
 
 import com.griddynamics.jagger.invoker.v2.JHttpQuery;
 import Scenario1.util.CsvProvider;
@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class QueriesProvider extends JHttpQuery implements Iterable {
+public class ParametersQueriesProvider extends JHttpQuery implements Iterable {
     CsvProvider csvProvider = new CsvProvider();
 
     @Override

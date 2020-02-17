@@ -18,6 +18,14 @@ public class PropertiesProvider {
         return prop;
     }
 
+    public String getEndPoint1() {
+        return getTestProperties().getProperty("endpoint1");
+    }
+
+    public String getEndPoint2() {
+        return getTestProperties().getProperty("endpoint2");
+    }
+
     public String getGlobalEndpoint() {
         return getTestProperties().getProperty("globalEndPoint");
     }
@@ -26,6 +34,7 @@ public class PropertiesProvider {
         File file = new File(getTestProperties().getProperty("pathToFile"));
         return file.getAbsolutePath();
     }
+
     public String getPathToSearchPhrase() {
         return getTestProperties().getProperty("searchPhrase");
     }
