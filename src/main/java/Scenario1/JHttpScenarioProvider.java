@@ -63,14 +63,14 @@ public class JHttpScenarioProvider {
 
         JLoadProfileUsers theSecondGroup1 = JLoadProfileUsers.builder(NumberOfUsers.of(1)).withLifeTimeInSeconds(20).build();
 
-        JLoadProfileUsers theSecondGroup2 = JLoadProfileUsers.builder(NumberOfUsers.of(2)).withStartDelayInSeconds(15).build();
+        JLoadProfileUsers theSecondGroup2 = JLoadProfileUsers.builder(NumberOfUsers.of(2)).withStartDelayInSeconds(60).build();
 
         JTerminationCriteria terminationCriteriaSecondGroup = JTerminationCriteriaIterations
-                .of(IterationsNumber.of(10), MaxDurationInSeconds.of(20));
+                .of(IterationsNumber.of(1000), MaxDurationInSeconds.of(120));
 
         JLoadTest jLoadTest2 = JLoadTest
                 .builder(Id.of("load_test2"), theSecondTestDefinition,
-                        JLoadProfileUserGroups.builder(theSecondGroup2, theSecondGroup1).build(), terminationCriteriaSecondGroup)
+                        JLoadProfileUserGroups.builder(theSecondGroup2, theSecondGroup1).withDelayBetweenInvocationsInMilliseconds(15).build(), terminationCriteriaSecondGroup)
                 .build();
 
 
@@ -79,7 +79,7 @@ public class JHttpScenarioProvider {
 
         JTestDefinition theThirdTestDefinition =
                 JTestDefinition.builder(Id.of("theThirdTestDefinition"), new EndpointProvider(new PropertiesProvider().getGlobalEndpoint()))
-                        .withLoadBalancer(JLoadBalancer.builder(JLoadBalancer.DefaultLoadBalancer.ONE_BY_ONE).withExclusiveAccess().build())
+                        .withLoadBalancer(JLoadBalancer.builder(JLoadBalancer.DefaultLoadBalancer.ONE_BY_ONE).build())
                         .withQueryProvider(new ParametersQueriesProvider())
                         .addValidator(new StatusCodeValidator())
                         .addValidator(new JSONTypeValidator())
@@ -92,7 +92,8 @@ public class JHttpScenarioProvider {
         JLoadProfileUsers theThirdGroup2 = JLoadProfileUsers.builder(NumberOfUsers.of(1)).withStartDelayInSeconds(15).build();
 
         JTerminationCriteria terminationCriteriaThirdGroup = JTerminationCriteriaIterations
-                .of(IterationsNumber.of(1200), MaxDurationInSeconds.of(180));
+                .of(IterationsNumber.of(1800), MaxDurationInSeconds.of(180));
+
 
         JLoadTest jLoadTest3 = JLoadTest
                 .builder(Id.of("load_test3"), theThirdTestDefinition,
@@ -101,7 +102,7 @@ public class JHttpScenarioProvider {
 
 
         JParallelTestsGroup jParallelTestsGroup = JParallelTestsGroup
-                .builder(Id.of("test_group1"), jLoadTest3)
+                .builder(Id.of("test_group1"), jLoadTest2)
                 .build();
 
 
