@@ -3,6 +3,10 @@ package Scenario1.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Properties;
 
 public class PropertiesProvider {
@@ -33,6 +37,7 @@ public class PropertiesProvider {
     public String getPathToCsvFile() {
         File file = new File(getTestProperties().getProperty("pathToFile"));
         return file.getAbsolutePath();
+
     }
 
     public String getPathToSearchPhrase() {
