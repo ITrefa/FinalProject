@@ -18,12 +18,15 @@ public class ParametersQueriesProvider extends JHttpQuery implements Iterable {
         PropertiesProvider propertiesProvider = new PropertiesProvider();
         List<String> values = csvProvider.CsvProvider(propertiesProvider.getPathToCsvFile());
 
+
+//TODO find the other way to do it
         for (int i = 0; i < values.size() - 1; i++) {
             queries.add(new JHttpQuery()
                     .path(propertiesProvider.getPathToSearchPhrase())
                     .queryParam(values.get(i), values.get(i + 1))
                     .get()
                     .responseBodyType(String.class));
+            i++;
         }
         return queries.iterator();
 
