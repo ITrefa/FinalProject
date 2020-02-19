@@ -50,8 +50,6 @@ public class JHttpScenarioProvider {
 
 
 
-
-
         JTestDefinition theSecondTestDefinition =
                 JTestDefinition.builder(Id.of("theSecondTestDefinition"), new EndpointProvider(new PropertiesProvider().getGlobalEndpoint()))
                         .withLoadBalancer(JLoadBalancer.builder(JLoadBalancer.DefaultLoadBalancer.ONE_BY_ONE).build())
@@ -66,12 +64,13 @@ public class JHttpScenarioProvider {
         JLoadProfileUsers theSecondGroup2 = JLoadProfileUsers.builder(NumberOfUsers.of(2)).withStartDelayInSeconds(60).build();
 
         JTerminationCriteria terminationCriteriaSecondGroup = JTerminationCriteriaIterations
-                .of(IterationsNumber.of(9), MaxDurationInSeconds.of(120));
+                .of(IterationsNumber.of(12), MaxDurationInSeconds.of(120));
 
         JLoadTest jLoadTest2 = JLoadTest
                 .builder(Id.of("load_test2"), theSecondTestDefinition,
                         JLoadProfileUserGroups.builder(theSecondGroup2, theSecondGroup1).withDelayBetweenInvocationsInMilliseconds(15000).build(), terminationCriteriaSecondGroup)
                 .build();
+
 
 
 
@@ -97,6 +96,9 @@ public class JHttpScenarioProvider {
                 .builder(Id.of("load_test3"), theThirdTestDefinition,
                         JLoadProfileUserGroups.builder(theThirdGroup1, theThirdGroup2).withDelayBetweenInvocationsInMilliseconds(20000).build(), terminationCriteriaThirdGroup)
                 .build();
+
+
+
 
 
         JParallelTestsGroup jParallelTestsGroup = JParallelTestsGroup
