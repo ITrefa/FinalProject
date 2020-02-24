@@ -38,6 +38,7 @@ public class PropertiesProvider {
         File file = new File(getTestProperties().getProperty("pathToFile"));
         return file.getAbsolutePath();
 
+
     }
 
     public String getPathToSearchPhrase() {

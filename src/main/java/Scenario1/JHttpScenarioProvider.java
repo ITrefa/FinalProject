@@ -102,7 +102,7 @@ public class JHttpScenarioProvider {
 
 
         JParallelTestsGroup jParallelTestsGroup = JParallelTestsGroup
-                .builder(Id.of("test_group1"), jLoadTest3, jLoadTest1, jLoadTest2)
+                .builder(Id.of("test_group1"), jLoadTest1, jLoadTest2, jLoadTest3)
                 .build();
 
 
