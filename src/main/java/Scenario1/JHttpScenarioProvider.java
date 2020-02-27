@@ -11,6 +11,7 @@ import com.griddynamics.jagger.user.test.configurations.JLoadTest;
 import com.griddynamics.jagger.user.test.configurations.JParallelTestsGroup;
 import com.griddynamics.jagger.user.test.configurations.JTestDefinition;
 import com.griddynamics.jagger.user.test.configurations.auxiliary.Id;
+import com.griddynamics.jagger.user.test.configurations.load.JLoadProfile;
 import com.griddynamics.jagger.user.test.configurations.load.JLoadProfileUserGroups;
 import com.griddynamics.jagger.user.test.configurations.load.JLoadProfileUsers;
 import com.griddynamics.jagger.user.test.configurations.load.auxiliary.NumberOfUsers;
@@ -39,15 +40,14 @@ public class JHttpScenarioProvider {
                         .build();
 
 
-        JLoadProfileUsers theFirstGroup = JLoadProfileUsers.builder(NumberOfUsers.of(2)).withStartDelayInSeconds(0).build();
+        JLoadProfileUsers theFirstGroup = JLoadProfileUsers.builder(NumberOfUsers.of(2)).build();
 
         JTerminationCriteria terminationCriteriaFirstGroup = JTerminationCriteriaIterations
-                .of(IterationsNumber.of(5), MaxDurationInSeconds.of(10));
+                .of(IterationsNumber.of(5), MaxDurationInSeconds.of(50));
 
         JLoadTest jLoadTest1 = JLoadTest
-                .builder(Id.of("load_test1"), theFirstTestDefinition, JLoadProfileUserGroups.builder(theFirstGroup).build(), terminationCriteriaFirstGroup)
+                .builder(Id.of("2Users5Iterations"), theFirstTestDefinition, JLoadProfileUserGroups.builder(theFirstGroup).build(), terminationCriteriaFirstGroup)
                 .build();
-
 
 
         JTestDefinition theSecondTestDefinition =
@@ -67,11 +67,9 @@ public class JHttpScenarioProvider {
                 .of(IterationsNumber.of(12), MaxDurationInSeconds.of(120));
 
         JLoadTest jLoadTest2 = JLoadTest
-                .builder(Id.of("load_test2"), theSecondTestDefinition,
+                .builder(Id.of("3Users2Min15Delay"), theSecondTestDefinition,
                         JLoadProfileUserGroups.builder(theSecondGroup2, theSecondGroup1).withDelayBetweenInvocationsInMilliseconds(15000).build(), terminationCriteriaSecondGroup)
                 .build();
-
-
 
 
         JTestDefinition theThirdTestDefinition =
@@ -92,17 +90,16 @@ public class JHttpScenarioProvider {
                 .of(IterationsNumber.of(15), MaxDurationInSeconds.of(180));
 
 
+
+
         JLoadTest jLoadTest3 = JLoadTest
-                .builder(Id.of("load_test3"), theThirdTestDefinition,
-                        JLoadProfileUserGroups.builder(theThirdGroup1, theThirdGroup2).withDelayBetweenInvocationsInMilliseconds(20000).build(), terminationCriteriaThirdGroup)
+                .builder(Id.of("2UsersInParallel"), theThirdTestDefinition, JLoadProfileUserGroups.builder(theThirdGroup1).withDelayBetweenInvocationsInMilliseconds(20000).build(),
+                        terminationCriteriaThirdGroup)
                 .build();
 
 
-
-
-
         JParallelTestsGroup jParallelTestsGroup = JParallelTestsGroup
-                .builder(Id.of("test_group1"), jLoadTest1, jLoadTest2, jLoadTest3)
+                .builder(Id.of("test_group1"), jLoadTest1)
                 .build();
 
 
