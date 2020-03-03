@@ -11,7 +11,7 @@
 
 
     <properties>
-        <spring.version>4.3.26.RELEASE</spring.version>
+        <spring.version>4.3.4.RELEASE</spring.version>
         <jagger.version>2.0.1-m1</jagger.version>
         <jagger.targetJdkVersion>1.8</jagger.targetJdkVersion>
     </properties>
@@ -63,12 +63,12 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>4.3.25.RELEASE</version>
+            <version>4.3.4.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>4.3.25.RELEASE</version>
+            <version>4.3.4.RELEASE</version>
         </dependency>
 
         <dependency>
