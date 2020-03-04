@@ -4,6 +4,7 @@ import Scenario1.listeneres.ListenerByteSize;
 import Scenario1.queriesProviders.ParametersQueriesProvider;
 import Scenario1.queriesProviders.SimpleQueriesProvider;
 import Scenario1.util.PropertiesProvider;
+import Scenario1.validators.urlValidator;
 import Scenario1.validators.JSONTypeValidator;
 import Scenario1.validators.StatusCodeValidator;
 import Scenario1.validators.XMLTypeValidator;
@@ -69,6 +70,7 @@ public class TestGroupsFactoryProvider {
                         .withQueryProvider(new SimpleQueriesProvider(new PropertiesProvider().getEndPoint1()))
                         .addValidator(new StatusCodeValidator())
                         .addValidator(new JSONTypeValidator())
+                        .addValidator(new urlValidator())
                         .addListener(new ListenerByteSize())
                         .build();
 
