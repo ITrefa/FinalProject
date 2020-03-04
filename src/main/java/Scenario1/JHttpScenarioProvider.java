@@ -7,8 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
-//NotNullInvocation listener
-//defaultresponsevalidatorprovider
 
 
 @Configuration
@@ -17,7 +15,7 @@ public class JHttpScenarioProvider {
     public JLoadScenario loadScenario() {
 
         JParallelTestsGroup theFirstTask = new TestGroupsFactoryProvider().twoUsers5Iterations();
-        JParallelTestsGroup theSecondTask = new TestGroupsFactoryProvider().threeUsers2MinDelay();
+        JParallelTestsGroup theSecondTask = new TestGroupsFactoryProvider().threeUsersStartByOne20Seconds();
         JParallelTestsGroup theThirdTask = new TestGroupsFactoryProvider().twoUsersInParallel();
 
         return JLoadScenario.builder(Id.of("scenarioForFinalTask"), theFirstTask)

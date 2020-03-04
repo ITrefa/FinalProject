@@ -18,7 +18,7 @@ public class JSONTypeValidator implements ResponseValidatorProvider {
             return new ResponseValidator<JHttpQuery, JHttpEndpoint, JHttpResponse>(taskId, sessionId, kernelContext) {
                 @Override
                 public String getName() {
-                    return "Successful json type validator";
+                    return "Successful json type";
                 }
 
                 @Override

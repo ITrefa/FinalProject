@@ -18,7 +18,7 @@ public class XMLTypeValidator implements ResponseValidatorProvider {
         return new ResponseValidator<JHttpQuery, JHttpEndpoint, JHttpResponse>(taskId, sessionId, kernelContext) {
             @Override
             public String getName() {
-                return "Successful xml type validator";
+                return "Successful xml type";
             }
 
             @Override

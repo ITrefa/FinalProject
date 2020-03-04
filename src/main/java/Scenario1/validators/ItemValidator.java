@@ -8,24 +8,24 @@ import com.griddynamics.jagger.invoker.v2.JHttpQuery;
 import com.griddynamics.jagger.invoker.v2.JHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 
-public class StatusCodeValidator implements ResponseValidatorProvider {
+public class ItemValidator implements ResponseValidatorProvider {
 
-    private static Logger log = LoggerFactory.getLogger(StatusCodeValidator.class);
+    //TODO make it different
+    private static Logger log = LoggerFactory.getLogger(ItemValidator.class);
 
     @Override
     public ResponseValidator<JHttpQuery, JHttpEndpoint, JHttpResponse> provide(String taskId, String sessionId, NodeContext kernelContext) {
         return new ResponseValidator<JHttpQuery, JHttpEndpoint, JHttpResponse>(taskId, sessionId, kernelContext) {
             @Override
             public String getName() {
-                return "Successful status code";
+                return "Not null item validator";
             }
 
             @Override
             public boolean validate(JHttpQuery jHttpQuery, JHttpEndpoint endpoint, JHttpResponse jHttpResponse, long l) {
-                if (jHttpResponse.getStatus() != HttpStatus.OK) {
-                    log.error("Invalid response code " + jHttpResponse.getStatus() + " for endpoint " + endpoint);
+                if (!jHttpResponse.getBody().toString().contains("Why")) {
+                    log.error("Invalid content type" + jHttpResponse.getHeaders().get("Content-Type") + " for endpoint " + endpoint);
                     return false;
                 }
                 return true;

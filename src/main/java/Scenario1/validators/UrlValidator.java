@@ -19,7 +19,7 @@ public class UrlValidator implements ResponseValidatorProvider {
         return new ResponseValidator<JHttpQuery, JHttpEndpoint, JHttpResponse>(taskId, sessionId, kernelContext) {
             @Override
             public String getName() {
-                return "Invocation not null validator";
+                return "Not null validator";
             }
 
             @Override
