@@ -12,9 +12,12 @@ import com.griddynamics.jagger.user.test.configurations.JParallelTestsGroup;
 import com.griddynamics.jagger.user.test.configurations.JTestDefinition;
 import com.griddynamics.jagger.user.test.configurations.auxiliary.Id;
 import com.griddynamics.jagger.user.test.configurations.load.JLoadProfile;
+import com.griddynamics.jagger.user.test.configurations.load.JLoadProfileInvocation;
 import com.griddynamics.jagger.user.test.configurations.load.JLoadProfileUserGroups;
 import com.griddynamics.jagger.user.test.configurations.load.JLoadProfileUsers;
+import com.griddynamics.jagger.user.test.configurations.load.auxiliary.InvocationCount;
 import com.griddynamics.jagger.user.test.configurations.load.auxiliary.NumberOfUsers;
+import com.griddynamics.jagger.user.test.configurations.load.auxiliary.ThreadCount;
 import com.griddynamics.jagger.user.test.configurations.loadbalancer.JLoadBalancer;
 import com.griddynamics.jagger.user.test.configurations.termination.JTerminationCriteriaDuration;
 import com.griddynamics.jagger.user.test.configurations.termination.JTerminationCriteriaIterations;
@@ -25,6 +28,8 @@ import com.griddynamics.jagger.user.test.configurations.termination.auxiliary.Ma
 public class TestGroupsFactoryProvider {
 
     public JParallelTestsGroup twoUsersInParallel() {
+
+
 
         JTestDefinition twoUsersInParallelDefinition =
                 JTestDefinition.builder(Id.of("2UsersInParallel"), new EndpointProvider(new PropertiesProvider().getGlobalEndpoint()))
@@ -67,12 +72,19 @@ public class TestGroupsFactoryProvider {
                         .addListener(new ListenerByteSize())
                         .build();
 
+        JLoadProfile jLoadProfileRps =
+                JLoadProfileInvocation.builder(InvocationCount.of(5), ThreadCount.of(2)).
+                        build();
+
         JLoadTest twoUsers5IterationsTest = JLoadTest
                 .builder(Id.of("2UsersFor5Iterations"),
                         twoUsers5IterationsDefinition,
-                        jLoadProfileUserGroupsProvider(2, 0, 0),
+                        jLoadProfileRps,
                         JTerminationCriteriaIterations.of(IterationsNumber.of(1), MaxDurationInSeconds.of(40)))
                 .build();
+
+
+
 
         return JParallelTestsGroup
                 .builder(Id.of("twoUsers5Iterations"), twoUsers5IterationsTest)
