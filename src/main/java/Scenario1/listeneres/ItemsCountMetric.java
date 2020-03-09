@@ -19,7 +19,7 @@ public class ItemsCountMetric extends ServicesAware implements Provider<Invocati
 
     private static Logger log = LoggerFactory.getLogger(ItemsCountMetric.class);
 
-    private final String metricName = "count-of-products";
+    private final String metricName = "count-of-items";
 
     @Override
     protected void init() {
@@ -48,8 +48,8 @@ public class ItemsCountMetric extends ServicesAware implements Provider<Invocati
                     log.info("Response: " + jHttpResponse);
                     log.info("Query: " + jHttpQuery);
                     log.info("Endpoint: " + jHttpEndpoint);
-                    String[] array = jHttpResponse.getBody().toString().split(",");
-                    int count = array.length;
+                    String[] array = jHttpResponse.getBody().toString().split(":");
+                    int count = array.length - 2;
                     getMetricService().saveValue(metricName, count);
                 }
             }

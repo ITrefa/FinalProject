@@ -18,7 +18,7 @@ public class TitleValidatorXML implements ResponseValidatorProvider {
         return new ResponseValidator<JHttpQuery, JHttpEndpoint, JHttpResponse>(taskId, sessionId, kernelContext) {
             @Override
             public String getName() {
-                return "Check title validator";
+                return "Invocation validator";
             }
 
             @Override

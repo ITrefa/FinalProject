@@ -24,7 +24,7 @@ public class ItemValidatorJSON implements ResponseValidatorProvider {
 
             @Override
             public boolean validate(JHttpQuery jHttpQuery, JHttpEndpoint endpoint, JHttpResponse jHttpResponse, long l) {
-                if (!jHttpResponse.getBody().toString().contains("whu")) {
+                if ((jHttpResponse.getHeaders().get("Content-Length")).contains("68")) {
                     log.error("Null item" + " for endpoint " + endpoint);
                     return false;
                 }

@@ -33,7 +33,8 @@ public class TestGroupsFactoryProvider {
                         .withQueryProvider(new ParametersQueriesProvider())
                         .addValidator(new StatusCodeValidator())
                         .addValidator(new JSONTypeValidator())
-                        .addListener(new ItemsCountMetric())
+                        .addValidator(new ItemValidatorJSON())
+                       // .addListener(new ItemsCountMetric())
                         .build();
 
         JLoadTest oneUser15Delay = JLoadTest
@@ -104,6 +105,7 @@ public class TestGroupsFactoryProvider {
                         .addValidator(new StatusCodeValidator())
                         .addValidator(new XMLTypeValidator())
                         .addValidator(new TitleValidatorXML())
+                        .addListener(new ByteSizeMetric())
                         .build();
 
 
