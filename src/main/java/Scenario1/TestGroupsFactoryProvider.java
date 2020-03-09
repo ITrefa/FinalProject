@@ -5,10 +5,7 @@ import Scenario1.listeneres.ItemsCountMetric;
 import Scenario1.queriesProviders.ParametersQueriesProvider;
 import Scenario1.queriesProviders.SimpleQueriesProvider;
 import Scenario1.util.PropertiesProvider;
-import Scenario1.validators.UrlValidator;
-import Scenario1.validators.JSONTypeValidator;
-import Scenario1.validators.StatusCodeValidator;
-import Scenario1.validators.XMLTypeValidator;
+import Scenario1.validators.*;
 import com.griddynamics.jagger.user.test.configurations.JLoadTest;
 import com.griddynamics.jagger.user.test.configurations.JParallelTestsGroup;
 import com.griddynamics.jagger.user.test.configurations.JTestDefinition;
@@ -24,9 +21,6 @@ import com.griddynamics.jagger.user.test.configurations.loadbalancer.JLoadBalanc
 import com.griddynamics.jagger.user.test.configurations.termination.JTerminationCriteriaDuration;
 import com.griddynamics.jagger.user.test.configurations.termination.auxiliary.DurationInSeconds;
 
-
-//TODO implement three new listeners
-//TODO implement one new validator
 
 
 public class TestGroupsFactoryProvider {
@@ -109,7 +103,7 @@ public class TestGroupsFactoryProvider {
                         .withQueryProvider(new SimpleQueriesProvider(new PropertiesProvider().getEndPoint2()))
                         .addValidator(new StatusCodeValidator())
                         .addValidator(new XMLTypeValidator())
-                        .addListener(new ByteSizeMetric())
+                        .addValidator(new TitleValidatorXML())
                         .build();
 
 
@@ -134,8 +128,6 @@ public class TestGroupsFactoryProvider {
                         jLoadProfileUserGroupsProvider(1, 15000, 40),
                         JTerminationCriteriaDuration.of(DurationInSeconds.of(140)))
                 .build();
-
-
 
         return JParallelTestsGroup
                 .builder(Id.of("threeUsersStartingWithOne"), oneUserEach20SecondsTest, oneUserEach20SecondsDelayTest, oneMoreUserEach20SecondsDelayTest)
