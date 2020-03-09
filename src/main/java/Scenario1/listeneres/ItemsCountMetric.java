@@ -15,16 +15,16 @@ import com.griddynamics.jagger.invoker.v2.JHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ByteSizeMetric extends ServicesAware implements Provider<InvocationListener> {
+public class ItemsCountMetric extends ServicesAware implements Provider<InvocationListener> {
 
-    private static Logger log = LoggerFactory.getLogger(ByteSizeMetric.class);
+    private static Logger log = LoggerFactory.getLogger(ItemsCountMetric.class);
 
-    private final String metricName = "size-of-body-in-bytes";
+    private final String metricName = "count-of-products";
 
     @Override
     protected void init() {
         getMetricService().createMetric(new MetricDescription(metricName)
-                .displayName("Size of response body in bytes")
+                .displayName("The amount of items")
                 .showSummary(true)
                 .plotData(true)
                 .addAggregator(new AvgMetricAggregatorProvider())
@@ -48,8 +48,9 @@ public class ByteSizeMetric extends ServicesAware implements Provider<Invocation
                     log.info("Response: " + jHttpResponse);
                     log.info("Query: " + jHttpQuery);
                     log.info("Endpoint: " + jHttpEndpoint);
-                    int size = jHttpResponse.getBody().toString().getBytes().length;
-                    getMetricService().saveValue(metricName, size);
+                    String[] array = jHttpResponse.getBody().toString().split(",");
+                    int count = array.length;
+                    getMetricService().saveValue(metricName, count);
                 }
             }
             @Override

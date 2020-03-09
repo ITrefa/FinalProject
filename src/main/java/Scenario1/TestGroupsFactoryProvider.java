@@ -1,6 +1,7 @@
 package Scenario1;
 
 import Scenario1.listeneres.ByteSizeMetric;
+import Scenario1.listeneres.ItemsCountMetric;
 import Scenario1.queriesProviders.ParametersQueriesProvider;
 import Scenario1.queriesProviders.SimpleQueriesProvider;
 import Scenario1.util.PropertiesProvider;
@@ -21,10 +22,8 @@ import com.griddynamics.jagger.user.test.configurations.load.auxiliary.NumberOfU
 import com.griddynamics.jagger.user.test.configurations.load.auxiliary.ThreadCount;
 import com.griddynamics.jagger.user.test.configurations.loadbalancer.JLoadBalancer;
 import com.griddynamics.jagger.user.test.configurations.termination.JTerminationCriteriaDuration;
-import com.griddynamics.jagger.user.test.configurations.termination.JTerminationCriteriaIterations;
 import com.griddynamics.jagger.user.test.configurations.termination.auxiliary.DurationInSeconds;
-import com.griddynamics.jagger.user.test.configurations.termination.auxiliary.IterationsNumber;
-import com.griddynamics.jagger.user.test.configurations.termination.auxiliary.MaxDurationInSeconds;
+
 
 //TODO implement three new listeners
 //TODO implement one new validator
@@ -40,20 +39,30 @@ public class TestGroupsFactoryProvider {
                         .withQueryProvider(new ParametersQueriesProvider())
                         .addValidator(new StatusCodeValidator())
                         .addValidator(new JSONTypeValidator())
-                        .addListener(new ByteSizeMetric())
+                        .addListener(new ItemsCountMetric())
                         .build();
 
         JLoadTest oneUser15Delay = JLoadTest
                 .builder(Id.of("1User15SecondsDelay"),
                         twoUsersInParallelDefinition,
-                        jLoadProfileUserGroupsProvider(1, 15000),
+                        JLoadProfileUserGroups
+                                .builder(JLoadProfileUsers
+                                        .builder(NumberOfUsers.of(1))
+                                        .build())
+                                .withDelayBetweenInvocationsInMilliseconds(15000)
+                                .build(),
                         JTerminationCriteriaDuration.of(DurationInSeconds.of(180)))
                 .build();
 
         JLoadTest oneUser20Delay = JLoadTest
                 .builder(Id.of("1User20SecondsDelay"),
                         twoUsersInParallelDefinition,
-                        jLoadProfileUserGroupsProvider(1, 20000),
+                        JLoadProfileUserGroups
+                                .builder(JLoadProfileUsers
+                                        .builder(NumberOfUsers.of(1))
+                                        .build())
+                                .withDelayBetweenInvocationsInMilliseconds(20000)
+                                .build(),
                         JTerminationCriteriaDuration.of(DurationInSeconds.of(180)))
                 .build();
 
@@ -83,7 +92,7 @@ public class TestGroupsFactoryProvider {
                 .builder(Id.of("2UsersFor5Iterations"),
                         twoUsers5IterationsDefinition,
                         jLoadProfileRps,
-                        JTerminationCriteriaIterations.of(IterationsNumber.of(1), MaxDurationInSeconds.of(40)))
+                        JTerminationCriteriaDuration.of(DurationInSeconds.of(100)))
                 .build();
 
         return JParallelTestsGroup
@@ -91,8 +100,6 @@ public class TestGroupsFactoryProvider {
                 .build();
     }
 
-
-//TODO found out what's wrong with this
 
     public JParallelTestsGroup threeUsersStartByOne20Seconds() {
 
@@ -106,34 +113,44 @@ public class TestGroupsFactoryProvider {
                         .build();
 
 
-
         JLoadTest oneUserEach20SecondsTest = JLoadTest
-                .builder(Id.of("oneUserEach20Seconds"),
+                .builder(Id.of("oneUserEach20SecondsWithoutDelay"),
                         threeUsers2MinDelayDefinition,
-                        jLoadProfileUserGroupsProvider(1, 20000),
-                        JTerminationCriteriaDuration.of(DurationInSeconds.of(120)))
+                        jLoadProfileUserGroupsProvider(1, 15000, 0 ),
+                        JTerminationCriteriaDuration.of(DurationInSeconds.of(180)))
                 .build();
 
-        JLoadTest twoUsersEach15SecondsTest = JLoadTest
-                .builder(Id.of("twoUsersEach15Seconds"),
+
+        JLoadTest oneUserEach20SecondsDelayTest = JLoadTest
+                .builder(Id.of("oneUserEach20SecondsWithDelay"),
                         threeUsers2MinDelayDefinition,
-                        jLoadProfileUserGroupsProvider(2, 15000),
-                        JTerminationCriteriaDuration.of(DurationInSeconds.of(120)))
+                        jLoadProfileUserGroupsProvider(1, 15000, 20),
+                        JTerminationCriteriaDuration.of(DurationInSeconds.of(160)))
                 .build();
+
+        JLoadTest oneMoreUserEach20SecondsDelayTest = JLoadTest
+                .builder(Id.of("oneMoreUserEach20SecondsWithDelay"),
+                        threeUsers2MinDelayDefinition,
+                        jLoadProfileUserGroupsProvider(1, 15000, 40),
+                        JTerminationCriteriaDuration.of(DurationInSeconds.of(140)))
+                .build();
+
+
 
         return JParallelTestsGroup
-                .builder(Id.of("threeUsersStartingWithOne"), oneUserEach20SecondsTest, twoUsersEach15SecondsTest)
+                .builder(Id.of("threeUsersStartingWithOne"), oneUserEach20SecondsTest, oneUserEach20SecondsDelayTest, oneMoreUserEach20SecondsDelayTest)
                 .build();
     }
 
-
-    private JLoadProfile jLoadProfileUserGroupsProvider(int numberOfUsers, int delayBetweenInvocationsMill) {
+    private JLoadProfile jLoadProfileUserGroupsProvider(int numberOfUsers, int delayBetweenInvocationsMill, int startDelay) {
         return JLoadProfileUserGroups
                 .builder(JLoadProfileUsers
                         .builder(NumberOfUsers.of(numberOfUsers))
+                        .withStartDelayInSeconds(startDelay)
                         .build())
                 .withDelayBetweenInvocationsInMilliseconds(delayBetweenInvocationsMill)
                 .build();
     }
+
 
 }

@@ -9,10 +9,10 @@ import com.griddynamics.jagger.invoker.v2.JHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ItemValidator implements ResponseValidatorProvider {
+public class ItemValidatorXML implements ResponseValidatorProvider {
 
     //TODO make it different
-    private static Logger log = LoggerFactory.getLogger(ItemValidator.class);
+    private static Logger log = LoggerFactory.getLogger(ItemValidatorXML.class);
 
     @Override
     public ResponseValidator<JHttpQuery, JHttpEndpoint, JHttpResponse> provide(String taskId, String sessionId, NodeContext kernelContext) {
@@ -24,8 +24,8 @@ public class ItemValidator implements ResponseValidatorProvider {
 
             @Override
             public boolean validate(JHttpQuery jHttpQuery, JHttpEndpoint endpoint, JHttpResponse jHttpResponse, long l) {
-                if (!jHttpResponse.getBody().toString().contains("Why")) {
-                    log.error("Invalid content type" + jHttpResponse.getHeaders().get("Content-Type") + " for endpoint " + endpoint);
+                if (!jHttpResponse.getBody().toString().contains("item")) {
+                    log.error("Null item" + " for endpoint " + endpoint);
                     return false;
                 }
                 return true;
