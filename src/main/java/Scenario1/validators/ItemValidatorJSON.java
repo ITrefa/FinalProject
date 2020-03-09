@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 public class ItemValidatorJSON implements ResponseValidatorProvider {
 
+    private static final String MIN_LENGTH_FOR_CORRECT_RESPONSE = "68";
+
 
     private static Logger log = LoggerFactory.getLogger(ItemValidatorJSON.class);
 
@@ -24,7 +26,7 @@ public class ItemValidatorJSON implements ResponseValidatorProvider {
 
             @Override
             public boolean validate(JHttpQuery jHttpQuery, JHttpEndpoint endpoint, JHttpResponse jHttpResponse, long l) {
-                if ((jHttpResponse.getHeaders().get("Content-Length")).contains("68")) {
+                if ((jHttpResponse.getHeaders().get("Content-Length")).contains(MIN_LENGTH_FOR_CORRECT_RESPONSE)) {
                     log.error("Null item" + " for endpoint " + endpoint);
                     return false;
                 }

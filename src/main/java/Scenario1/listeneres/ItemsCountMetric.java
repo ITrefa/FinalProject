@@ -19,6 +19,10 @@ public class ItemsCountMetric extends ServicesAware implements Provider<Invocati
 
     private static Logger log = LoggerFactory.getLogger(ItemsCountMetric.class);
 
+    private static int count = 0;
+
+    private static final int OFFSET_INDEX = 5;
+
     private final String metricName = "count-of-items";
 
     @Override
@@ -43,16 +47,18 @@ public class ItemsCountMetric extends ServicesAware implements Provider<Invocati
             public void onSuccess(InvocationInfo invocationInfo) {
                 if (invocationInfo.getResult() != null) {
                     JHttpResponse jHttpResponse = (JHttpResponse) invocationInfo.getResult();
-                    JHttpQuery jHttpQuery= (JHttpQuery) invocationInfo.getQuery();
+                    JHttpQuery jHttpQuery = (JHttpQuery) invocationInfo.getQuery();
                     JHttpEndpoint jHttpEndpoint = (JHttpEndpoint) invocationInfo.getEndpoint();
                     log.info("Response: " + jHttpResponse);
                     log.info("Query: " + jHttpQuery);
                     log.info("Endpoint: " + jHttpEndpoint);
-                    String[] array = jHttpResponse.getBody().toString().split(":");
-                    int count = array.length - 2;
+                    String[] array = jHttpResponse.getHeaders().toString().split(",");
+                    log.info("RESPONSE ITEM: " + array[OFFSET_INDEX]);
+                    count++;
                     getMetricService().saveValue(metricName, count);
                 }
             }
+
             @Override
             public void onFail(InvocationInfo invocationInfo, InvocationException e) {
             }

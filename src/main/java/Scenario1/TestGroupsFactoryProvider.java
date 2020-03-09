@@ -34,7 +34,7 @@ public class TestGroupsFactoryProvider {
                         .addValidator(new StatusCodeValidator())
                         .addValidator(new JSONTypeValidator())
                         .addValidator(new ItemValidatorJSON())
-                       // .addListener(new ItemsCountMetric())
+                        .addListener(new ItemsCountMetric())
                         .build();
 
         JLoadTest oneUser15Delay = JLoadTest
