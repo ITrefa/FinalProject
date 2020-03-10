@@ -2,9 +2,7 @@ package Scenario1.listeneres;
 
 import com.griddynamics.jagger.engine.e1.Provider;
 import com.griddynamics.jagger.engine.e1.collector.AvgMetricAggregatorProvider;
-import com.griddynamics.jagger.engine.e1.collector.MaxMetricAggregatorProvider;
 import com.griddynamics.jagger.engine.e1.collector.MetricDescription;
-import com.griddynamics.jagger.engine.e1.collector.MinMetricAggregatorProvider;
 import com.griddynamics.jagger.engine.e1.collector.invocation.InvocationInfo;
 import com.griddynamics.jagger.engine.e1.collector.invocation.InvocationListener;
 import com.griddynamics.jagger.engine.e1.services.ServicesAware;
@@ -27,9 +25,7 @@ public class ByteSizeMetric extends ServicesAware implements Provider<Invocation
                 .displayName("Size of response body in bytes")
                 .showSummary(true)
                 .plotData(true)
-                .addAggregator(new AvgMetricAggregatorProvider())
-                .addAggregator(new MaxMetricAggregatorProvider())
-                .addAggregator(new MinMetricAggregatorProvider()));
+                .addAggregator(new AvgMetricAggregatorProvider()));
     }
 
     @Override
