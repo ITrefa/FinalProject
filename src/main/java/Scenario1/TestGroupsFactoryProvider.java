@@ -2,6 +2,7 @@ package Scenario1;
 
 import Scenario1.listeneres.ByteSizeMetric;
 import Scenario1.listeneres.ItemsCountMetric;
+import Scenario1.listeneres.ItemsCountMetricXML;
 import Scenario1.queriesProviders.ParametersQueriesProvider;
 import Scenario1.queriesProviders.SimpleQueriesProvider;
 import Scenario1.util.PropertiesProvider;
@@ -105,7 +106,7 @@ public class TestGroupsFactoryProvider {
                         .addValidator(new StatusCodeValidator())
                         .addValidator(new XMLTypeValidator())
                         .addValidator(new TitleValidatorXML())
-                        .addListener(new ByteSizeMetric())
+                        .addListener(new ItemsCountMetricXML())
                         .build();
 
 
