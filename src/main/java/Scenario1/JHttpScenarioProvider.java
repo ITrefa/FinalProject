@@ -18,7 +18,7 @@ public class JHttpScenarioProvider {
         JParallelTestsGroup theSecondTask = new TestGroupsFactoryProvider().threeUsersStartByOne20Seconds();
         JParallelTestsGroup theThirdTask = new TestGroupsFactoryProvider().twoUsersInParallel();
 
-        return JLoadScenario.builder(Id.of("scenarioForFinalTask"), theSecondTask)
+        return JLoadScenario.builder(Id.of("scenarioForFinalTask"), theFirstTask, theSecondTask, theThirdTask)
                 .build();
     }
 

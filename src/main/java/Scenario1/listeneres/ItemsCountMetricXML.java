@@ -14,14 +14,15 @@ import com.griddynamics.jagger.invoker.v2.JHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.*;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemsCountMetricXML extends ServicesAware implements Provider<InvocationListener> {
 
@@ -61,27 +62,15 @@ public class ItemsCountMetricXML extends ServicesAware implements Provider<Invoc
                     String body = jHttpResponse.getBody().toString();
 
                     Document document = toXmlDocument(body);
+                    XPathFactory xpathFactory = XPathFactory.newInstance();
+                    XPath xpath = xpathFactory.newXPath();
 
-                    Element root = document.getDocumentElement();
-                    NodeList nodes = root.getChildNodes();
-
-                    for (int i = 0; i < nodes.getLength(); i++) {
-                        Node node = nodes.item(i);
-                        if (node instanceof Element) {
-                            Element child = (Element) node;
-                            if (child.hasChildNodes()) {
-                                NodeList nodeList = child.getChildNodes();
-                                for (int j = 0; j < nodeList.getLength(); j++) {
-                                    Node node1 = nodeList.item(j);
-                                   if (node1.getNodeValue().equals("Why")) {
-                                       count = count + 1;
-                                   }
-                                }
-                            }
-                        }
+                    if (getItem(document, xpath, 1).contains("Why ") && getItem(document, xpath, 1).contains(" are great")) {
+                        count++;
                     }
-
-
+                    if (getItem(document, xpath, 3).contains("Who ") && getItem(document, xpath, 3).contains(" WonderWidgets")) {
+                        count++;
+                    }
                     getMetricService().saveValue(metricName, count);
                 }
             }
@@ -107,4 +96,19 @@ public class ItemsCountMetricXML extends ServicesAware implements Provider<Invoc
         }
         return null;
     }
+
+    private static List<String> getItem(Document doc, XPath xpath, int number) {
+        List<String> list = new ArrayList<>();
+        try {
+            XPathExpression expr =
+                    xpath.compile("/slideshow/slide/item[" + number + "]/text()");
+            NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+            for (int i = 0; i < nodes.getLength(); i++)
+                list.add(nodes.item(i).getNodeValue());
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }
