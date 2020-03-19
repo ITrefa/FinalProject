@@ -11,20 +11,19 @@ import com.griddynamics.jagger.user.test.configurations.JLoadTest;
 import com.griddynamics.jagger.user.test.configurations.JParallelTestsGroup;
 import com.griddynamics.jagger.user.test.configurations.JTestDefinition;
 import com.griddynamics.jagger.user.test.configurations.auxiliary.Id;
-import com.griddynamics.jagger.user.test.configurations.load.JLoadProfile;
-import com.griddynamics.jagger.user.test.configurations.load.JLoadProfileInvocation;
-import com.griddynamics.jagger.user.test.configurations.load.JLoadProfileUserGroups;
-import com.griddynamics.jagger.user.test.configurations.load.JLoadProfileUsers;
+import com.griddynamics.jagger.user.test.configurations.load.*;
 import com.griddynamics.jagger.user.test.configurations.load.auxiliary.InvocationCount;
 import com.griddynamics.jagger.user.test.configurations.load.auxiliary.NumberOfUsers;
 import com.griddynamics.jagger.user.test.configurations.load.auxiliary.ThreadCount;
 import com.griddynamics.jagger.user.test.configurations.loadbalancer.JLoadBalancer;
+import com.griddynamics.jagger.user.test.configurations.termination.JTerminationCriteria;
+import com.griddynamics.jagger.user.test.configurations.termination.JTerminationCriteriaBackground;
 import com.griddynamics.jagger.user.test.configurations.termination.JTerminationCriteriaDuration;
 import com.griddynamics.jagger.user.test.configurations.termination.auxiliary.DurationInSeconds;
 
 
-
 public class TestGroupsFactoryProvider {
+
 
     public JParallelTestsGroup twoUsersInParallel() {
 
@@ -38,33 +37,25 @@ public class TestGroupsFactoryProvider {
                         .addListener(new ItemsCountMetric())
                         .build();
 
-        JLoadTest oneUser15Delay = JLoadTest
-                .builder(Id.of("1User15SecondsDelay"),
+
+        JLoadTest oneUser20SecondsDelay = JLoadTest
+                .builder(Id.of("1Users20SecondsDelay"),
                         twoUsersInParallelDefinition,
-                        JLoadProfileUserGroups
-                                .builder(JLoadProfileUsers
-                                        .builder(NumberOfUsers.of(1))
-                                        .build())
-                                .withDelayBetweenInvocationsInMilliseconds(15000)
-                                .build(),
+                        jLoadProfileUserGroupsProvider(1, 20000, 0),
                         JTerminationCriteriaDuration.of(DurationInSeconds.of(180)))
                 .build();
 
-        JLoadTest oneUser20Delay = JLoadTest
+
+        JLoadTest oneUserBackground = JLoadTest
                 .builder(Id.of("1User20SecondsDelay"),
                         twoUsersInParallelDefinition,
-                        JLoadProfileUserGroups
-                                .builder(JLoadProfileUsers
-                                        .builder(NumberOfUsers.of(1))
-                                        .build())
-                                .withDelayBetweenInvocationsInMilliseconds(20000)
-                                .build(),
-                        JTerminationCriteriaDuration.of(DurationInSeconds.of(180)))
+                        jLoadProfileUserGroupsProvider(1, 15000, 0),
+                        JTerminationCriteriaBackground.getInstance())
                 .build();
 
 
         return JParallelTestsGroup
-                .builder(Id.of("twoUsersInParallel"), oneUser15Delay, oneUser20Delay)
+                .builder(Id.of("twoUsersInParallel"), oneUser20SecondsDelay, oneUserBackground)
                 .build();
 
     }
@@ -80,14 +71,14 @@ public class TestGroupsFactoryProvider {
                         .addListener(new ByteSizeMetric())
                         .build();
 
-        JLoadProfile jLoadProfileRps =
+        JLoadProfile jLoadProfileInvocation =
                 JLoadProfileInvocation.builder(InvocationCount.of(5), ThreadCount.of(2)).
                         build();
 
         JLoadTest twoUsers5IterationsTest = JLoadTest
                 .builder(Id.of("2UsersFor5Iterations"),
                         twoUsers5IterationsDefinition,
-                        jLoadProfileRps,
+                        jLoadProfileInvocation,
                         JTerminationCriteriaDuration.of(DurationInSeconds.of(100)))
                 .build();
 
@@ -96,6 +87,7 @@ public class TestGroupsFactoryProvider {
                 .build();
     }
 
+    //todo use another approach within one group 
 
     public JParallelTestsGroup threeUsersStartByOne20Seconds() {
 
@@ -113,7 +105,7 @@ public class TestGroupsFactoryProvider {
         JLoadTest oneUserEach20SecondsTest = JLoadTest
                 .builder(Id.of("oneUserEach20SecondsWithoutDelay"),
                         threeUsers2MinDelayDefinition,
-                        jLoadProfileUserGroupsProvider(1, 15000, 0 ),
+                        jLoadProfileUserGroupsProvider(1, 15000, 0),
                         JTerminationCriteriaDuration.of(DurationInSeconds.of(180)))
                 .build();
 

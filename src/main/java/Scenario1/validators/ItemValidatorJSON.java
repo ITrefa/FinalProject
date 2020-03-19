@@ -9,6 +9,8 @@ import com.griddynamics.jagger.invoker.v2.JHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+//TODO make it for body not headers
 public class ItemValidatorJSON implements ResponseValidatorProvider {
 
     private static final String MIN_LENGTH_FOR_CORRECT_RESPONSE = "68";

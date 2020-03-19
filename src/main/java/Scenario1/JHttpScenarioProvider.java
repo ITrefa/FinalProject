@@ -7,8 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
-
-
 @Configuration
 public class JHttpScenarioProvider {
     @Bean
@@ -18,7 +16,7 @@ public class JHttpScenarioProvider {
         JParallelTestsGroup theSecondTask = new TestGroupsFactoryProvider().threeUsersStartByOne20Seconds();
         JParallelTestsGroup theThirdTask = new TestGroupsFactoryProvider().twoUsersInParallel();
 
-        return JLoadScenario.builder(Id.of("scenarioForFinalTask"), theFirstTask, theSecondTask, theThirdTask)
+        return JLoadScenario.builder(Id.of("scenarioForFinalTask"), theThirdTask)
                 .build();
     }
 
