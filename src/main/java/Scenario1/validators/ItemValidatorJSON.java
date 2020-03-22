@@ -6,15 +6,14 @@ import com.griddynamics.jagger.engine.e1.collector.ResponseValidatorProvider;
 import com.griddynamics.jagger.invoker.v2.JHttpEndpoint;
 import com.griddynamics.jagger.invoker.v2.JHttpQuery;
 import com.griddynamics.jagger.invoker.v2.JHttpResponse;
+import org.json.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-//TODO make it for body not headers
 public class ItemValidatorJSON implements ResponseValidatorProvider {
 
-    private static final String MIN_LENGTH_FOR_CORRECT_RESPONSE = "68";
-
+    private static final int MIN_LENGTH_FOR_CORRECT_RESPONSE = 68;
 
     private static Logger log = LoggerFactory.getLogger(ItemValidatorJSON.class);
 
@@ -28,7 +27,10 @@ public class ItemValidatorJSON implements ResponseValidatorProvider {
 
             @Override
             public boolean validate(JHttpQuery jHttpQuery, JHttpEndpoint endpoint, JHttpResponse jHttpResponse, long l) {
-                if ((jHttpResponse.getHeaders().get("Content-Length")).contains(MIN_LENGTH_FOR_CORRECT_RESPONSE)) {
+                String json = jHttpResponse.getBody().toString();
+                JSONObject obj = new JSONObject(json);
+                String contentLength = obj.get("Content-Length").toString();
+                if (Integer.parseInt(contentLength) < MIN_LENGTH_FOR_CORRECT_RESPONSE) {
                     log.error("Null item" + " for endpoint " + endpoint);
                     return false;
                 }

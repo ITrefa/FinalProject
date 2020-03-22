@@ -38,6 +38,13 @@
     </repositories>
 
     <dependencies>
+
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20190722</version>
+        </dependency>
         <!-- Jagger service-->
         <dependency>
             <groupId>com.griddynamics.jagger</groupId>
